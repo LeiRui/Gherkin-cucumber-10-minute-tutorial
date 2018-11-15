@@ -68,11 +68,16 @@ In order to make it easier and faster to express multiple timeseries paths or pr
 
 When "\*" appears at the end of the path, it represents ("\*")+, which is one or more layers of "\*". For example, `root.vehicle.device1.*` represents all paths prefixed by `root.vehicle.device1` with layers greater than or equal to 4, like `root.vehicle.device1.*`, `root.vehicle.device1.*.*`, `root.vehicle.device1.*.*.*`, etc.
 
-When "\*" appears in the middle of the path, it represents "\*" itself, i.e., a layer. For example, `root.vehicle.*.sensor1` represents a 4-layer path which is prefixed with root.vehicle and suffixed with sensor1.   
+When "\*" appears in the middle of the path, it represents "\*" itself, i.e., a layer. For example, `root.vehicle.*.sensor1` represents a 4-layer path which is prefixed with `root.vehicle` and suffixed with `sensor1`.   
 
 Note: "\*" cannot be placed at the beginning of the path.
 
 Note: A path with "\*" at the end has the same meaning as a prefix path, e.g., `root.vehicle.*` and `root.vehicle` is the same.
+
+### 3.1.8 Timestamp
+The timestamp is the time point at which a data arrives. IoTDB timestamps are divided into two types: LONG and DATETIME (including DATETIME-INPUT and DATETIME-DISPLAY). When a user enters a timestamp, he can use a LONG type timestamp or a DATETIME-INPUT type timestamp, where the support format of the DATETIME-INPUT type timestamp is shown in Table 3-1.
+
+
 
 
 
