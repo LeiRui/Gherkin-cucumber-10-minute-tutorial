@@ -192,6 +192,7 @@ GORILLA coding is more suitable for floating-point sequence with similar values 
 The four codings described in the previous sections are applicable to different data types. If the correspondence is wrong, the time series cannot be created correctly. The correspondence between the data type and its supported codings is summarized in Table 3-3.
 
 **Table 3-3 The correspondence between the data type and its supported codings**
+
 |Data Type	|Supported Coding|
 |:---:|:---:|
 |BOOLEAN|	PLAIN, RLE|
