@@ -143,6 +143,69 @@ IoTDB can support LONG types and DATETIME-DISPLAY types when displaying timestam
 | '|	escape for text	|delimiter|	　|
 | ''|	single quote|	literal	|'|
 
+### 3.1.9 Value
+The value of a time series is actually the value sent by a sensor to IoTDB. This value can be stored by IoTDB according to the data type. At the same time, users can select the compression mode and the corresponding coding mode according to the data type of this value. See Sections 3.2 and 3.3 of this document for details on data type and corresponding coding.
+
+### 3.1.10 Point
+A data point is made up of a timestamp value pair (timestamp, value).
+
+### 3.1.11 Column
+A column of data contains all values belonging to a time series and the timestamps corresponding to these values. When there are multiple columns of data, IoTDB merges the timestamps into multiple < timestamp-value > pairs (timestamp, value, value,...).
+
+## 1.2 Data Type
+IoTDB supports six data types in total: BOOLEAN (Boolean), INT32 (Integer), INT64 (Long Integer), FLOAT (Single Precision Floating Point), DOUBLE (Double Precision Floating Point), TEXT (String).
+
+The time series of FLOAT and DOUBLE type can specify MAX_POINT_NUMBER, which is the number of digits after the decimal point of the floating point number, if the coding method is RLE or TS_2DIFF (see Section 3.3). Refer to Section 7.1.2.2 of this document for more information on how to specify. If MAX_POINT_NUMBER is not specified, the system will use float_precision in the configuration file “tsfile-format.properties” for configuration (refer to section 5.2.2.2.1 of this document for the configuration method).
+
+When the data type of data input by the user in the system does not correspond to the data type of the time series, the system will report type errors. As shown below, the second-order difference coding does not support the Boolean type:
+
+```
+IoTDB> create timeseries root.ln.wf02.wt02.status WITH DATATYPE=BOOLEAN, ENCODING=TS_2DIFF
+error: encoding TS_2DIFF does not support BOOLEAN
+```
+
+## 1.3 Coding 
+In order to improve the efficiency of data storage, it is necessary to encode data during data writing, thereby reducing the amount of disk space used. In the process of writing and reading data, the amount of data involved in the I/O operations can be reduced to improve performance. IoTDB supports four coding methods for different types of data:
+
+* PLAIN
+* TS_2DIFF
+* RLE
+* GORILLA
+
+### 1.3.1 PLAIN
+PLAIN coding, the default coding mode, i.e, no coding, supports multiple data types. It has high compression and decompression efficiency while suffering from low space storage efficiency.
+
+### 1.3.2 TS_2DIFF
+Second-order differential coding is more suitable for coding monotonically increasing or decreasing sequence data, and is not recommended for sequence data with large fluctuations.
+
+Second-order differential coding can also be used to encode floating-point numbers, but it is necessary to specify reserved decimal digits (MAX_POINT_NUMBER, see Section 7.1.2.2 of this document for more information on how to specify) when creating time series. It is more suitable for storing sequence data where floating-point values appear continuously, monotonously increase or decrease, and it is not suitable for storing sequence data with high precision requirements after the decimal point or with large fluctuations.
+
+### 1.3.3 RLE
+Run-length coding is more suitable for storing sequence with continuous integer values, and is not recommended for sequence data with most of the time different values.
+
+Run-length coding can also be used to encode floating-point numbers, but it is necessary to specify reserved decimal digits (MAX_POINT_NUMBER, see Section 7.1.2.2 of this document for more information on how to specify) when creating time series. It is more suitable for storing sequence data where floating-point values appear continuously, monotonously increase or decrease, and it is not suitable for storing sequence data with high precision requirements after the decimal point or with large fluctuations.
+
+### 1.3.4 GORILLA
+GORILLA coding is more suitable for floating-point sequence with similar values and is not recommended for sequence data with large fluctuations.
+
+### 1.3.5 Correspondence between data type and coding
+The four codings described in the previous sections are applicable to different data types. If the correspondence is wrong, the time series cannot be created correctly. The correspondence between the data type and its supported codings is summarized in Table 3-3.
+
+**Table 3-3 The correspondence between the data type and its supported codings**
+|Data Type	|Supported Coding|
+|:---:|:---:|
+|BOOLEAN|	PLAIN, RLE|
+|INT32	|PLAIN, RLE, TS_2DIFF|
+|INT64	|PLAIN, RLE, TS_2DIFF|
+|FLOAT	|PLAIN, RLE, TS_2DIFF, GORILLA|
+|DOUBLE	|PLAIN, RLE, TS_2DIFF, GORILLA|
+|TEXT	|PLAIN|
+
+## 1.4 Compression Method
+When the time series is written and encoded as binary data according to the specified type, IoTDB compresses the data using compression technology to further improve space storage efficiency. Although both encoding and compression are designed to improve storage efficiency, encoding techniques are usually only available for specific data types (e.g., second-order differential encoding is only suitable for INT32 or INT64 data type, and storing floating-point numbers requires multiplying them by 10m to convert to integers), after which the data is converted to a binary stream. The compression method (SNAPPY) compresses the binary stream, so the use of the compression method is no longer limited by the data type.
+
+IoTDB allows you to specify the compression method of the column when creating a time series. IoTDB now supports two kinds of compression: UNCOMPRESSOR (no compression) and SNAPPY compression. The specified syntax for compression is detailed in section 7.1.2.2 of this document.
+
 
 
 
