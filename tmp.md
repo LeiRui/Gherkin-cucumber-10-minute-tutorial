@@ -104,6 +104,7 @@ The timestamp is the time point at which a data arrives. IoTDB timestamps are di
 |yyyy.MM.dd'T'HH:mm:ss.SSSZZ|
 |ISO8601 standard time format|
 +-------------------+
+
 Table 3-1 Support format of DATETIME-INPUT type timestamp
 
 
