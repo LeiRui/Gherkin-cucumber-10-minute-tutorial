@@ -77,7 +77,7 @@ Note: A path with "\*" at the end has the same meaning as a prefix path, e.g., `
 ### 3.1.8 Timestamp
 The timestamp is the time point at which a data arrives. IoTDB timestamps are divided into two types: LONG and DATETIME (including DATETIME-INPUT and DATETIME-DISPLAY). When a user enters a timestamp, he can use a LONG type timestamp or a DATETIME-INPUT type timestamp, where the support format of the DATETIME-INPUT type timestamp is shown in Table 3-1.
 
-Table 3-1 Support format of DATETIME-INPUT type timestamp
+**Table 3-1 Support format of DATETIME-INPUT type timestamp
 
 |format|
 |:---:|
