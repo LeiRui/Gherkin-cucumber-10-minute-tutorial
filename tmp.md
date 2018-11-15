@@ -107,7 +107,14 @@ The timestamp is the time point at which a data arrives. IoTDB timestamps are di
 |yyyy.MM.dd'T'HH:mm:ss.SSSZZ|
 |ISO8601 standard time format|
 
+IoTDB can support LONG types and DATETIME-DISPLAY types when displaying timestamps. The DATETIME-DISPLAY type can support user-defined time formats. The syntax of the custom time format is shown in Table 3-2.
 
+**Table 3-2 The syntax of the custom time format**
+
+|Symbol|Meaning|Presentation|Examples|
+|:---:|:---:|:---:|:---:|
+|G|era|era|era|
+|C|century of era (>=0)|	number|	20|
 
 
 
